@@ -13,7 +13,6 @@ services:
     container_name: LBCFLBA_php
     ports:
       - '8000:80'
-    restart: always
     volumes:
        - ./logs:/var/log/apache2
        - ./html:/var/www/html
@@ -28,7 +27,6 @@ services:
       - 8082:80
       volumes:
       - /sessions
-      restart: always
 
 volumes:
   db_data:

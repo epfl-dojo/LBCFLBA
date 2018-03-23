@@ -1,17 +1,27 @@
 <?php
-var_dump($_POST);
+$previous_content= file_get_contents('./depenses.json');
+$previous_content = (array)json_decode($previous_content);
 
 if ($_POST) {
   $json = json_encode($_POST);
-  $previous_content= file_get_contents('./depenses.json');
-  $previous_content = (array)json_decode($previous_content);
-  var_dump($previous_content);
+  //var_dump($previous_content);
   $previous_content[] = $_POST;
   file_put_contents('./depenses.json', json_encode($previous_content));
 
+  /* ?><pre><?php print_r ($previous_content); ?></pre><?php*/
 }
 
- ?>
+function callback($matches) { print_r ($matches);}
+function parse_template($template_file)
+{
+  $template = file_get_contents(__DIR__. "/templates/" . $template_file . ".html");
+  $parsed = preg_replace_callback('/\{\{([a-zA-Z]+.*)\}\}/', 'callback', $template);
+  echo $parsed;
+}
+
+
+parse_template("record");
+  ?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -28,5 +38,36 @@ if ($_POST) {
           <input type="submit" />
           </fieldset>
     </form>
+
+    <table border="1">
+      <tr>
+        <th> Personne:</th>
+        <th> Prix:</th>
+        <th> Description:</th>
+      </tr>
+        <?php
+          foreach ($previous_content as $content){
+        ?>
+        <tr>
+        <td>
+          <?php
+              echo $content->guy;
+           ?>
+        </td>
+        <td>
+          <?php
+          echo $content->price;
+           ?>
+        </td>
+        <td>
+          <?php
+          echo $content->object;
+           ?>
+        </td>
+      </tr>
+      <?php
+        }
+      ?>
+    </table>
   </body>
 </html>
